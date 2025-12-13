@@ -1,0 +1,8 @@
+Frontend: Next.js (App Router)
+Language: TypeScript
+Styling: Tailwind CSS
+Backend: Supabase
+Database: PostgreSQL
+Auth: Supabase Auth (GitHub OAuth)
+Deployment: Vercel
+Version Control: Git + GitHub
