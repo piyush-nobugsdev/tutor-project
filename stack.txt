@@ -6,3 +6,4 @@ Database: PostgreSQL
 Auth: Supabase Auth (GitHub OAuth)
 Deployment: Vercel
 Version Control: Git + GitHub
+supabadbase
