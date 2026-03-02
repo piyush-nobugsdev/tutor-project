@@ -7,3 +7,11 @@ Auth: Supabase Auth (GitHub OAuth)
 Deployment: Vercel
 Version Control: Git + GitHub
 supabadbase
+
+
+Client ID
+Ov23liSNEefDEpJRkjeX
+
+client secret: 4456db87f41c5c534f2bdceeec5ea93eb329aa34
+
+callback url : https://nubeoqivkgbftggyfedd.supabase.co/auth/v1/callback
