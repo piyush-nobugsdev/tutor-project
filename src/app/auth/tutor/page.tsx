@@ -15,12 +15,16 @@ export default function TutorAuthPage() {
     localStorage.setItem('pending_role', 'tutor')
 
     const supabase = createSupabaseBrowserClient()
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    })
+   const { error } = await supabase.auth.signInWithOAuth({
+  provider,
+  options: {
+    redirectTo: `${window.location.origin}/auth/callback`,
+    queryParams: {
+      prompt: 'select_account',  // Forces account selection
+      access_type: 'offline',
+    },
+  },
+})
 
     if (error) {
       console.error('OAuth error:', error.message)
