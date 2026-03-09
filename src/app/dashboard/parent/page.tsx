@@ -41,7 +41,7 @@ export default async function ParentDashboardPage() {
         </p>
       </div>
 
-      {/* Stats row */}
+      {/* Stats row
       <div className="grid grid-cols-3 gap-5">
         <StatCard
           label="Children"
@@ -61,7 +61,7 @@ export default async function ParentDashboardPage() {
           subtitle="pending reviews"
           color="purple"
         />
-      </div>
+      </div> */}
 
       {/* Hub cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
