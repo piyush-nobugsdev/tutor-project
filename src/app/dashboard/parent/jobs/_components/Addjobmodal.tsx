@@ -13,6 +13,14 @@ const LOCATION_LABELS: Record<LocationType, string> = {
   both:      'Both',
 }
 
+const SUBJECTS = [
+  { value: 'math',          label: 'Mathematics' },
+  { value: 'science',       label: 'Science' },
+  { value: 'english',       label: 'English' },
+  { value: 'social_studies',label: 'Social Studies' },
+  { value: 'hindi',         label: 'Hindi' },
+]
+
 const EMPTY_FORM: CreateJobInput = {
   child_id:        '',
   subject:         '',
@@ -118,17 +126,26 @@ export default function AddJobModal({ children, onClose, onSuccess }: Props) {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
+              {/* Subject — constrained to exact values matching tutor_qualifications */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Subject <span className="text-red-500">*</span>
                 </label>
-                <input
-                  required type="text" value={form.subject}
+                <select
+                  required
+                  value={form.subject}
                   onChange={e => set('subject', e.target.value)}
-                  placeholder="e.g. Mathematics"
                   className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none"
-                />
+                >
+                  <option value="">Select a subject</option>
+                  {SUBJECTS.map(s => (
+                    <option key={s.value} value={s.value}>
+                      {s.label}
+                    </option>
+                  ))}
+                </select>
               </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Grade <span className="text-red-500">*</span>
