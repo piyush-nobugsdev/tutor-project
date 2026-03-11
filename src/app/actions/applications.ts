@@ -57,6 +57,8 @@ export interface ApplicationDetail {
   }[] | null
 }
 
+
+
 // ─── Helper ───────────────────────────────────────────────────────────────────
 
 async function getProfileId(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>) {
@@ -167,4 +169,79 @@ export async function getApplicationDetail(applicationId: string): Promise<{
 
   if (error) return { data: null, error: error.message }
   return { data: data as unknown as ApplicationDetail, error: null }
+}
+
+// ─── Add this to src/app/actions/applications.ts ─────────────────────────────
+// Place after the existing getApplicationDetail function.
+
+export interface ParentClass {
+  jobId: string
+  subject: string
+  gradeLevel: number
+  description: string
+  hoursPerWeek: number
+  budgetPerHour: number
+  isNegotiable: boolean
+  locationType: string
+  childName: string
+  tutorName: string
+}
+
+export async function getParentClasses(): Promise<{
+  data: ParentClass[] | null
+  error: string | null
+}> {
+  const supabase = await createSupabaseServerClient()
+  const { profileId, error: idError } = await getProfileId(supabase)
+  if (idError || !profileId) return { data: null, error: idError }
+
+  const { data: jobIds, error: jobError } = await supabase
+    .from('jobs')
+    .select('id')
+    .eq('parent_id', profileId)
+
+  if (jobError) return { data: null, error: jobError.message }
+
+  const jobIdList = (jobIds ?? []).map(job => job.id)
+
+  const { data, error } = await supabase
+    .from('applications')
+    .select(
+      `job_id,
+       profiles ( full_name ),
+       jobs (
+         subject, grade_level, description, hours_per_week,
+         budget_per_hour, is_negotiable, location_type,
+         children ( name )
+       )`
+    )
+    .eq('status', 'accepted')
+    // Only accepted applications for jobs this parent owns
+    .in('job_id', jobIdList)
+    .order('updated_at', { ascending: false })
+
+  if (error) return { data: null, error: error.message }
+  if (!data) return { data: [], error: null }
+
+  const classes = data.map((row) => {
+    // Supabase joins return arrays even for single FK — access with [0]
+    const job = (row.jobs as unknown as any[])?.[0] ?? row.jobs
+    const child = Array.isArray(job?.children) ? job.children[0] : job?.children
+    const tutor = Array.isArray(row.profiles) ? row.profiles[0] : row.profiles
+
+    return {
+      jobId: row.job_id as string,
+      subject: job?.subject ?? '',
+      gradeLevel: job?.grade_level ?? 0,
+      description: job?.description ?? '',
+      hoursPerWeek: job?.hours_per_week ?? 0,
+      budgetPerHour: job?.budget_per_hour ?? 0,
+      isNegotiable: job?.is_negotiable ?? false,
+      locationType: job?.location_type ?? 'online',
+      childName: child?.name ?? 'Unknown',
+      tutorName: tutor?.full_name ?? 'Unknown',
+    }
+  })
+
+  return { data: classes, error: null }
 }
