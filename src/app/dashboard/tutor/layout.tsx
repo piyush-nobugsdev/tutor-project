@@ -3,8 +3,8 @@ import Navbar from '@/components/Navbar'
 
 const TUTOR_NAV_LINKS = [
   { label: 'Home',        href: '/dashboard/tutor' },
-  { label: 'Test',        href: '/dashboard/tutor/test' },
-  { label: 'Browse Jobs', href: '/dashboard/tutor/jobs' },
+  { label: 'Test',        href: '/dashboard/tutor/tests' },
+  { label: 'Applications', href: '/dashboard/tutor/applications' },
   { label: 'Classes',     href: '/dashboard/tutor/classes' },
 ]
 
